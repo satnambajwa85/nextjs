@@ -1,11 +1,34 @@
+
+import React, { useState } from 'react'
+import { useQuery, gql } from '@apollo/client'
 import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
-
+import { useAuth } from '@/lib/auth.js'
+import { FeedQuery } from '@/graphql/Queries'
 const inter = Inter({ subsets: ['latin'] })
 
+
+
+import { Header } from "@/components/Header"
+import { Hero } from "@/components/Hero"
+import { SearchCard } from '@/components/SearchCard';
+import { BookingCard } from '@/components/BookingCard'; 
+
+import { Offer, Order } from '@duffel/api';
+
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+
 export default function Home() {
+
+  const [offer, setOffer] = useState(null);
+  const [order, setOrder] = useState(null);
+
+  const hasOffer = offer && typeof offer === 'object' && !(offer instanceof Error);
+  const hasOrder = order && typeof order === 'object' && !(order instanceof Error);
+
   return (
     <>
       <Head>
@@ -14,110 +37,150 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>src/pages/index.tsx</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
+        <div className="page">
+          <Header />
+          {!offer && (
+            <div>
+              <Hero />
+              <div className="search-box">
+                <div className="container">
+                    <SearchCard
+                      beforeSearch={() => setOrder(null)}
+                      onSuccess={(offer:any) => setOrder(offer)}
+                      onError={(e:any) => setOrder(e)}
+                    />
+                </div>
+                <div className="container block">
+                  <div className="nc-Section-Heading relative flex flex-row items-end justify-between mb-12 lg:mb-16 text-neutral-900 text-neutral-50">
+                    <div className="max-w-2xl">
+                      <h2 className="text-3xl text-4xl font-semibold">Heading of sections</h2>
+                      <span className="mt-2 mt-3 font-normal block text-xl text-neutral-500 text-neutral-400">Descriptions for sections</span>
+                    </div>
+                  
+                  </div>
+                  <div className="glide__track">
+                    <ul className="glide__slides" >
+                      <li className="glide__slide glide__slide--active" >
+                        <a className="nc-CardCategory3 flex flex-col " href="/chisfis/listing-stay">
+                          <div className="flex-shrink-0 relative w-full aspect-w-5 aspect-h-4 aspect-h-7 h-0 rounded-2xl overflow-hidden group">
+                            <div className="nc-NcImage " >
+                              <img src="https://images.pexels.com/photos/64271/queen-of-liberty-statue-of-liberty-new-york-liberty-statue-64271.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=3&amp;h=750&amp;w=1260" className="object-cover w-full h-full rounded-2xl" alt="nc-imgs" />
+                            </div>
+                            <span className="opacity-0 group-opacity-100 absolute inset-0 bg-black bg-opacity-10 transition-opacity"></span>
+                          </div>
+                          <div className="mt-4 truncate">
+                            <h2 className="text-base text-lg text-neutral-900 text-neutral-100 font-medium truncate">New Yourk</h2>
+                            <span className="block mt-2 text-sm text-neutral-6000 text-neutral-400">188,288 properties</span>
+                          </div>
+                        </a>
+                      </li>
+                      <li className="glide__slide" >
+                        <a className="nc-CardCategory3 flex flex-col "  href="/chisfis/listing-stay">
+                          <div className="flex-shrink-0 relative w-full aspect-w-5 aspect-h-4 aspect-h-7 h-0 rounded-2xl overflow-hidden group">
+                            <div className="nc-NcImage " >
+                              <img src="https://images.pexels.com/photos/7740160/pexels-photo-7740160.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=750&amp;w=1260" className="object-cover w-full h-full rounded-2xl" alt="nc-imgs" />
+                            </div>
+                            <span className="opacity-0 group-opacity-100 absolute inset-0 bg-black bg-opacity-10 transition-opacity"></span>
+                          </div>
+                          <div className="mt-4 truncate">
+                            <h2 className="text-base text-lg text-neutral-900 text-neutral-100 font-medium truncate">Singapore</h2>
+                            <span className="block mt-2 text-sm text-neutral-6000 text-neutral-400">188,288 properties</span>
+                          </div>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+    
+          {hasOffer && !hasOrder && (
+              <BookingCard
+                offer={offer}
+                onSuccess={(order:any) => setOrder(order)}
+                onError={( e:any ) => {
+                  setOrder(e);
+                  setOffer(null);
+                }}
               />
-            </a>
-          </div>
+            )}
+    
+    
         </div>
-
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-          <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
-          </div>
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
+      
     </>
   )
 }
+
+/*
+export default function Home() {
+  const { isSignedIn } = useAuth()
+  
+  return (
+    <div className={styles.container}>
+      <Head>
+        <title>GRANDcast.FM</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <main className={styles.main}>
+        <h1>GRANDcast.FM</h1>
+        {!isSignedIn() && <SignIn />}
+        {isSignedIn() && <EpisodeFeed />}
+      </main>
+    </div>
+  )
+}
+
+
+const SignIn = () => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  
+  const { signIn, signOut } = useAuth()
+
+  function onSubmit(e) {
+    e.preventDefault()
+    signIn({ username, password })
+  }
+
+  return (
+    <div>
+      <form onSubmit={onSubmit}>
+        <input
+          type="text"
+          placeholder="username"
+          onChange={(e) => setUsername(e.target.value)}
+        ></input>
+        <input
+          type="password"
+          placeholder="password"
+          onChange={(e) => setPassword(e.target.value)}
+        ></input>
+        <button type="submit">Sign In</button>
+      </form>
+    </div>
+  )
+}
+
+
+
+
+const EpisodeFeed = () => {
+  const { data } = useQuery(FeedQuery)
+  const { signOut } = useAuth()
+  return (
+    <div>
+      <h1>Episode Feed</h1>
+      <ul>
+        {data?.episodeFeed.map((v) => {
+          return <li key={v.id}>{v.title}</li>
+        })}
+      </ul>
+      <button onClick={() => signOut()}>Sign Out</button>
+    </div>
+  )
+}
+
+*/
