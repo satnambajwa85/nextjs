@@ -109,6 +109,7 @@ export const SearchCard: React.FC<SearchCardProps> = ({
     }
     else
       setStartDate(date);
+    setShowCal(!showCal);
   }
 
   const selectionRange = {
@@ -119,7 +120,7 @@ export const SearchCard: React.FC<SearchCardProps> = ({
 
   const openCal = (step:number) => {
     setSelected(step);
-    setShowCal(!showCal);
+    setShowCal(true);
   }
   
   const setOrigin1 = (d:any ) => {

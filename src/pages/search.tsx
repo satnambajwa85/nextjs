@@ -7,32 +7,21 @@ import styles from '@/styles/Home.module.css'
 import { useAuth } from '@/lib/auth.js'
 import { FeedQuery } from '@/graphql/Queries'
 const inter = Inter({ subsets: ['latin'] })
-
 import { GENERIC_ERROR_MESSAGE } from '@/constants/error';
-
-
 import { Header } from "@/components/Header"
 import { Hero } from "@/components/Hero"
 import { SearchCard } from '@/components/SearchCard';
 import { BookingCard } from '@/components/BookingCard'; 
-
 import { Offer, Order } from '@duffel/api';
-
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-
-
 import {useRouter} from "next/router";
-
-
-
 export default function Search () {
   const { query } = useRouter();
   const [sort, setSort] = useState<'total_amount' | 'total_duration'> ('total_duration');
   const [isFetching, setIsFetching] = useState(false);
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
-
   const [offer, setOffer] = useState(null);
   const [order, setOrder] = useState(null);
   const [departureDate, setDepartureDate] = useState(new Date());
@@ -40,19 +29,12 @@ export default function Search () {
   const [returnOffers, setReturnOffers] = useState(false);
   const [stops, setStops] = useState(0);
   const [trevelClass, setTrevelClass] = useState('economy');
-  
-  
   const hasOffer = offer && typeof offer === 'object' && !(offer instanceof Error);
   const hasOrder = order && typeof order === 'object' && !(order instanceof Error);
-
-
-
-  
   const fetchOffers = async () => {
     setOffer(null);
     setIsFetching(true);
     try {
-
       if(origin && destination) {
         const res = await fetch('/api/search', {
           method: 'post',
@@ -70,44 +52,33 @@ export default function Search () {
             sort
           }),
         });
-
         const { offer, errors } = await res.json();
-
         if (errors) {
           new Error(
               Array.isArray(errors) ? errors[0].title : GENERIC_ERROR_MESSAGE
           );
           return;
         }
-
         if (!offer) {
           new Error(GENERIC_ERROR_MESSAGE);
           return;
         }
-
         setOffer(offer);
       }
     } catch (e) {
       e instanceof Error ? e : new Error(GENERIC_ERROR_MESSAGE);
     }
-
     setIsFetching(false);
   };
-
   useEffect(() => {
     setOrigin(query.origin);
     setDestination(query.destination);
   },)
-
   useEffect(() => {
     setOrigin(query.origin);
     setDestination(query.destination);
     fetchOffers()
   }, [origin,destination])
-
-
-
-  console.log(offer);
   return (
     <>
       <Head>
