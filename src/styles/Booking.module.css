@@ -1,0 +1,84 @@
+.page{
+    margin-top: 100px;
+}
+
+.card{
+    border: 1px solid rgba(243,244,246, 1);
+    max-width: 80%;
+    width: 100%;
+    margin: auto;
+    z-index: 999;
+
+    position: relative;
+    margin-top: 20px;
+    padding: 1.5rem;
+
+    transition-duration: .15s;
+    transition-property: box-shadow;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+
+    background-color: rgb(255 255 255/1);
+    border-width: 1px;
+    border-radius: 1rem;
+
+}
+
+.content {
+    padding-right: 5rem;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.content img {
+    width: 8rem;
+    flex-shrink: 0;
+
+    width: 2.5rem;
+    display: block;
+    vertical-align: middle;
+
+    height: auto;
+    max-width: 100%;
+}
+
+.airline{
+    margin-left: 40px;
+    font-size: 12px;
+}
+.down {
+    transform: translate(0,-50%) rotate(0) skewX(0) skewY(0) scaleX(1) scaleY(1);
+    top: 5%0;
+    bottom: auto;
+    border-radius: 9999px;
+    justify-content: center;
+    align-items: self-end;
+    cursor: pointer;
+    width: 2.5rem;
+    height: 14px;
+    display: flex;
+    right: 0;
+    position: absolute;
+    overflow: hidden;
+    bottom: 0px;
+}
+
+.icon {
+    font-weight: 900;
+    font-family: Line Awesome Free;
+    font-feature-settings: normal;
+    text-rendering: auto;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    color: rgba(17,24,39,1);
+    transform: rotateZ(45deg);
+}
+
+.icon:before {
+    content: "\f107";
+}

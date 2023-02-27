@@ -137,6 +137,7 @@ p strong {
   background: #fff;
   box-shadow: 9px -10px 20px #e2e6ee;
   z-index: 99999;
+  top: 0px;
 }
 
 .header .container {
@@ -620,6 +621,7 @@ p strong {
 
 .airportselect { 
   width: 80%;
+  display: 'inline-block'
 }
 
 *:focus {

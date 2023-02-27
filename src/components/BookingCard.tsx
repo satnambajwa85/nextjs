@@ -4,6 +4,8 @@ import { Card } from './Card';
 import { formatCurrency, getAirlineLogoUrl } from '@/utils';
 import { GENERIC_ERROR_MESSAGE } from '@/constants/error';
 
+import styles from '@/styles/Booking.module.css'
+
 interface BookingCardProps {
   offer: Offer;
   onSuccess(order: Order): void;
@@ -17,7 +19,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
 }) => {
   const [isFetching, setIsFetching] = useState(false);
 
-  const bookOffer = async () => {
+  const bookOffer = async (item:any) => {
     setIsFetching(true);
 
     const res = await fetch(`/api/book`, {
@@ -46,27 +48,32 @@ export const BookingCard: React.FC<BookingCardProps> = ({
     }
     onSuccess(order);
   };
-  //console.log(offer);
+
+  console.log(offer);
   return (
-      <Card.Root className="page block">
-        <Card.Content>
-          <img
-            src={getAirlineLogoUrl(offer.owner.iata_code)}
-            alt={offer.owner.name}
-            width={24}
-            height={24}
-          />
-          <Card.Text color="dark">{offer.owner.name}</Card.Text>
-          <Card.Text className="offer-currency" color="dark">
-            {formatCurrency(offer.total_amount, offer.total_currency)}
-          </Card.Text>
-        </Card.Content>
-        <button
-          disabled={isFetching}
-          onClick={async () => await bookOffer()}
-        >
-        {isFetching ? 'Booking…' : 'Book'}
-        </button>
-      </Card.Root>
-  );
+    <div className={styles.page}>
+    {
+      offer.map((item:any, index:number) => (
+        <Card.Root key={index} className={styles.card}>
+          <Card.Content className={styles.content}>
+            {offer && <img
+              src={getAirlineLogoUrl(item?.owner?.iata_code)}
+              alt={item?.owner?.name}
+              width={24}
+              height={24}
+            /> }
+            <Card.Text className={styles.airline}>{item?.owner?.name}</Card.Text>
+            <Card.Text className="offer-currency" color="dark">
+              {item && formatCurrency(item?.total_amount, item?.total_currency)}
+            </Card.Text>
+            <span className={styles.down}>
+              <i className={styles.icon}></i>
+            </span>
+          </Card.Content>
+          
+        </Card.Root>
+      ))
+    }
+  </div>
+  )
 };

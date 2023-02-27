@@ -21,6 +21,11 @@ import { Offer, Order } from '@duffel/api';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 
+
+
+import {useRouter} from "next/router";
+
+
 export default function Home() {
 
   const [offer, setOffer] = useState(null);
@@ -45,9 +50,9 @@ export default function Home() {
               <div className="search-box">
                 <div className="container">
                     <SearchCard
-                      beforeSearch={() => setOrder(null)}
-                      onSuccess={(offer:any) => setOrder(offer)}
-                      onError={(e:any) => setOrder(e)}
+                      beforeSearch={() => setOffer(null)}
+                      onSuccess={(offer:any) => setOffer(offer)}
+                      onError={(e:any) => setOffer(e)}
                     />
                 </div>
                 <div className="container block">
